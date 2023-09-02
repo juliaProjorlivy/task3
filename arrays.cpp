@@ -50,11 +50,6 @@ size_t get_data(char **data, FILE *stream)
     return i;
 }
 
-void get_data2(char *data)
-{
-    puts(data);
-}
-
 int split_string(char **dest, char *src, size_t size)
 {
     int i = 0;
@@ -115,7 +110,7 @@ void third_example()
 {
     const char *data2[] = {"hay", "please", "free", "super", "run"};
     print_rectangle(data2, 5);
-    puts("third example completed\n");
+    puts("third example completed");
     puts("--------😎--------");
 }
 
