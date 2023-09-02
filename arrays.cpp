@@ -7,6 +7,7 @@
 #define MAX_STRLEN 20
 #define MAX_ROWS 20
 
+// выводит строки из массива
 void print_rectangle(const char **data, size_t rows)
 {
     for(size_t row = 0; row < rows; row++)
@@ -15,6 +16,7 @@ void print_rectangle(const char **data, size_t rows)
     }
 }
 
+// выводит строки, записанные в файле и переданные в массив указателей data
 void print_rectangle_file(const char **data, size_t rows)
 {
     for(size_t row = 0; row < rows; row++)
@@ -24,6 +26,7 @@ void print_rectangle_file(const char **data, size_t rows)
     printf("\n");
 }
 
+// выводит треугольный массив
 void print_triangle(const char *data, int n)
 {
     for(int rows = 1; rows < n + 1; rows++)
@@ -36,6 +39,8 @@ void print_triangle(const char *data, int n)
     }
 }
 
+// заполняет массив указателей data указателями на строки, считанные из напрямую из файла stream
+// возвращает количество строк
 size_t get_data(char **data, FILE *stream)
 {
     int i = 0;
@@ -51,6 +56,8 @@ size_t get_data(char **data, FILE *stream)
     return i;
 }
 
+// разбивает буфер src на отдельные строки и передает на них указатель в массив указателей
+// возвращает количество строк
 int split_string(char **dest, char *src, size_t size)
 {
     int i = 0;
@@ -158,16 +165,16 @@ void fifth_example()
 
 int main()
 {
-    // firste example print data from file using fread
+    // firste example print data from file using get_data function
     first_example();
 
-    //second example print data from file useing struct stat
+    //second example print data from file useing struct stat and fread
     second_example();
 
     // third example print data using arr
     third_example();
 
-    // forth print data using only struct stat
+    // forth print data using struct stat and puts
     forth_example();
     
     // fifth print triangle array data
