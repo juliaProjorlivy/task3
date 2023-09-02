@@ -21,6 +21,7 @@ void print_rectangle_file(const char **data, size_t rows)
     {
         printf("%s", *(data + row));
     }
+    printf("\n");
 }
 
 void print_triangle(const char *data, int n)
