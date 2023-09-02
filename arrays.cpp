@@ -4,7 +4,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
-#define MAX_STRLEN 20
+
 #define MAX_ROWS 20
 
 // выводит строки из массива
@@ -43,11 +43,12 @@ void print_triangle(const char *data, int n)
 // возвращает количество строк
 size_t get_data(char **data, FILE *stream)
 {
+    const int max_strlen = 20;
     int i = 0;
-    char line[MAX_STRLEN] = {};
+    char line[max_strlen] = {};
     while(!feof(stream))
     {
-        if(fgets(line, MAX_STRLEN, stream) != NULL)
+        if(fgets(line, max_strlen, stream) != NULL)
         {
             *(data + i) = strdup(line);
             i++;
@@ -56,12 +57,12 @@ size_t get_data(char **data, FILE *stream)
     return i;
 }
 
-// разбивает буфер src на отдельные строки и передает на них указатель в массив указателей
+// разбивает буфер src на отдельные строки и передает указатель на них в массив указателей
 // возвращает количество строк
 int split_string(char **dest, char *src, size_t size)
 {
     int i = 0;
-    int len = 0;
+    int len = 0; //длина строки
     int str_count = 0;
     while(i < (int)size)
     {
@@ -78,9 +79,9 @@ int split_string(char **dest, char *src, size_t size)
     return str_count;
 }
 
-void clean_data(char **data, size_t len)
+void clean_data(char **data, size_t data_size)
 {
-    for(int i = 0; i < len; i++)
+    for(int i = 0; i < data_size; i++)
     {
         free(*(data + i));
     }
@@ -90,10 +91,10 @@ void first_example()
 {
     FILE *file = fopen("data.txt", "r");
     char **data = (char **)calloc(sizeof(char *), MAX_ROWS);
-    size_t len = get_data(data, file);
-    print_rectangle_file((const char **)data, len);
+    size_t data_size = get_data(data, file); // data_size - количиство строк
+    print_rectangle_file((const char **)data, data_size);
 
-    clean_data(data, len);
+    clean_data(data, data_size);
     fclose(file);
     free(data);
     puts("first example completed");
