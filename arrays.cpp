@@ -43,7 +43,6 @@ size_t get_data(char **data, FILE *stream)
     {
         if(fgets(line, MAX_STRLEN, stream) != NULL)
         {
-            printf("str = %s\n", line);
             *(data + i) = strdup(line);
             i++;
         }
@@ -76,41 +75,95 @@ int split_string(char **dest, char *src, size_t size)
     return str_count;
 }
 
+void first_example()
+{
+    FILE *file = fopen("data.txt", "r");
+    char **data = (char **)calloc(sizeof(char *), MAX_ROWS);
+    size_t len = get_data(data, file);
+    print_rectangle_file((const char **)data, len);
+    fclose(file);
+    free(data);
+    puts("first example completed");
+    puts("--------😎--------");
+}
+
+void second_example()
+{
+    FILE *file = fopen("data.txt", "r");
+    char **data_dest = (char **)calloc(sizeof(char *), MAX_ROWS);
+
+    struct stat buf;
+    stat("data.txt", &buf);
+
+    size_t data_size = buf.st_size;
+
+    char *data_src = (char *)calloc(data_size, sizeof(char));
+
+    fread(data_src, sizeof(char), data_size, file);
+
+    int str_count = split_string(data_dest, data_src, data_size);
+    print_rectangle_file((const char **)data_dest, str_count);
+
+    fclose(file);
+    free(data_src);
+    free(data_dest);
+    puts("second example completed");
+    puts("--------😎--------");
+}
+
+void third_example()
+{
+    const char *data2[] = {"hay", "please", "free", "super", "run"};
+    print_rectangle(data2, 5);
+    puts("third example completed\n");
+    puts("--------😎--------");
+}
+
+void forth_example()
+{
+    FILE *file = fopen("data.txt", "r");
+    struct stat buf;
+    stat("data.txt", &buf);
+
+    size_t data_size = buf.st_size;
+
+    char *data = (char *)calloc(data_size, sizeof(char));
+
+    fread(data, sizeof(char), data_size, file);
+    puts(data);
+
+    fclose(file);
+    free(data);
+    puts("forth example completed");
+    puts("--------😎--------");
+}
+
+void fifth_example()
+{
+     const char data3[] = {   1,
+                            2, 3, 
+                            4, 5, 6,
+                            7, 8, 9, 10};
+    print_triangle(data3, 4);
+    puts("fifth example completed");
+    puts("--------😎--------");
+}
 
 int main()
 {
     // firste example print data from file using fread
-    FILE *file = fopen("data.txt", "r");
-    char **data = (char **)calloc(sizeof(char *), MAX_ROWS);
-    size_t len = get_data(data, file);
+    first_example();
 
-    // first example print data from file useing struct stat
-    FILE *file = fopen("data.txt", "r");
+    //second example print data from file useing struct stat
+    second_example();
+
+    // third example print data using arr
+    third_example();
+
+    // forth print data using only struct stat
+    forth_example();
     
-    char **data = (char **)calloc(sizeof(char *), MAX_ROWS);
-
-    // size_t len = getdata(data, file);
-
-    struct stat buf;
-    stat("data.txt", &buf);
-    char *data4 = (char *)calloc(buf.st_size, sizeof(char));
-    fread(data4, sizeof(char), buf.st_size, file);
-    // getdata2(data4);
-    // free(data4);
-    int str_count = split_string(data, data4, buf.st_size);
-    print_rectangle((const char **)data, str_count);
-
-    fclose(file);
-    // printRectangle((const char **)data, len);
-    free(data4);
-    free(data);
-
-    const char *data2[] = {"hay", "please", "free", "super", "run"};
-    print_rectangle(data2, 5);
-    // const char data3[] = {   1,
-    //                         2, 3, 
-    //                         4, 5, 6,
-    //                         7, 8, 9, 10};
-    // printTriangle(data3, 4);
+    // fifth print triangle array data
+    fifth_example();
     
 }
