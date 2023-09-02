@@ -71,12 +71,22 @@ int split_string(char **dest, char *src, size_t size)
     return str_count;
 }
 
+void clean_data(char **data, size_t len)
+{
+    for(int i = 0; i < len; i++)
+    {
+        free(*(data + i));
+    }
+}
+
 void first_example()
 {
     FILE *file = fopen("data.txt", "r");
     char **data = (char **)calloc(sizeof(char *), MAX_ROWS);
     size_t len = get_data(data, file);
     print_rectangle_file((const char **)data, len);
+
+    clean_data(data, len);
     fclose(file);
     free(data);
     puts("first example completed");
@@ -100,6 +110,7 @@ void second_example()
     int str_count = split_string(data_dest, data_src, data_size);
     print_rectangle_file((const char **)data_dest, str_count);
 
+    clean_data(data_dest, (size_t)str_count);
     fclose(file);
     free(data_src);
     free(data_dest);
