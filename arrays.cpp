@@ -9,7 +9,7 @@
 #include <unistd.h>
 
 #define ERROR_MESSAGE (fprintf(stderr, "☠️  Error: %d, %s\n", errno, strerror(errno)))
-#define EXAMPLE_END_MESSAGE(num) (printf("%s example completed\n--------😎--------\n\n", num))
+#define EXAMPLE_END_MESSAGE(num) (printf("%s example completed\n--------😎--------\n\n", (num)))
 
 
 // выводит строки из массива
