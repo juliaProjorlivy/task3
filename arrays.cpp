@@ -8,7 +8,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-#define ERROR_MESSAGE (fprintf(stderr, "☠️  Error: %d, %s\n", errno, strerror(errno)))
+#define ERROR_MESSAGE(err) (fprintf(stderr, "☠️  Error %s: %d, %s\n", (err), errno, strerror(errno)))
 #define EXAMPLE_END_MESSAGE(num) (printf("%s example completed\n--------😎--------\n\n", (num)))
 
 
@@ -67,7 +67,7 @@ size_t get_data(char **data, FILE *stream)
         {
             if((*(data + i) = strdup(line)) == NULL)
             {
-                ERROR_MESSAGE;
+                ERROR_MESSAGE("cannot read file");
                 break;
             }
             i++;
@@ -92,7 +92,7 @@ size_t split_string(char **dest, char *src, size_t size)
         {
             if((*(dest + str_count) = strndup(src + i - len, len)) == NULL)
             {
-                ERROR_MESSAGE;
+                ERROR_MESSAGE("memory allocation failure");
                 break;
             }
             str_count++;
@@ -125,7 +125,7 @@ int first_example()
     FILE *file = fopen("data.txt", "r");
     if(file == NULL)
     {
-        ERROR_MESSAGE;
+        ERROR_MESSAGE("open file");
         EXAMPLE_END_MESSAGE("first");
         return 1;
     }
@@ -133,7 +133,7 @@ int first_example()
     char **data = (char **)calloc(sizeof(char *), max_rows);
     if(data == NULL)
     {
-        ERROR_MESSAGE;
+        ERROR_MESSAGE("memory allocation failure");
         EXAMPLE_END_MESSAGE("first");
         return 1;
     }
@@ -159,7 +159,7 @@ int second_example()
     FILE *file = fopen("data.txt", "r");
     if(file == NULL)
     {
-        ERROR_MESSAGE;
+        ERROR_MESSAGE("open file");
         EXAMPLE_END_MESSAGE("second");
         return 1;
     }
@@ -168,7 +168,7 @@ int second_example()
 
     if(data_dest == NULL)
     {
-        ERROR_MESSAGE;
+        ERROR_MESSAGE("memory allocation failure");
         EXAMPLE_END_MESSAGE("second");
         return 1;
     }
@@ -181,7 +181,7 @@ int second_example()
         char *data_src = (char *)calloc(data_size + 1, sizeof(char)); //here
         if(data_src == NULL)
         {
-            ERROR_MESSAGE;
+            ERROR_MESSAGE("memory allocation failure");
             EXAMPLE_END_MESSAGE("second");
             return 1;
         }
@@ -195,7 +195,7 @@ int second_example()
         }
         else
         {
-            ERROR_MESSAGE;
+            ERROR_MESSAGE("cannot read file");
             EXAMPLE_END_MESSAGE("second");
             return 1;
         }
@@ -203,7 +203,7 @@ int second_example()
     }
     else
     {
-        ERROR_MESSAGE;
+        ERROR_MESSAGE("unable to stat");
         EXAMPLE_END_MESSAGE("second");
         return 1;
     }
@@ -232,7 +232,7 @@ int forth_example()
     FILE *file = fopen("data.txt", "r");
     if(file == NULL)
     {
-        ERROR_MESSAGE;
+        ERROR_MESSAGE("open file");
         EXAMPLE_END_MESSAGE("forth");
         return 1;
     }
@@ -253,7 +253,7 @@ int forth_example()
             }
             else
             {
-                ERROR_MESSAGE;
+                ERROR_MESSAGE("cannot read file");
                 EXAMPLE_END_MESSAGE("forth");
                 return 1;
             }
@@ -263,7 +263,7 @@ int forth_example()
     }
     else
     {
-        ERROR_MESSAGE;
+        ERROR_MESSAGE("unable to stat");
         EXAMPLE_END_MESSAGE("forth");
         return 1;
     }
