@@ -16,7 +16,6 @@
 void print_rectangle(const char **data, size_t rows, int is_file)
 {
     assert(data != NULL);
-    assert(isfinite(rows));
     assert(isfinite(is_file));
 
     if(is_file)
@@ -83,7 +82,6 @@ size_t split_string(char **dest, char *src, size_t size)
 {
     assert(dest != NULL);
     assert(src != NULL);
-    assert(isfinite(size));
 
     size_t i = 0;
     size_t len = 0; //длина строки
@@ -110,7 +108,6 @@ size_t split_string(char **dest, char *src, size_t size)
 void clean_data(char **data, size_t data_size)
 {
     assert(data != NULL);
-    assert(isfinite(data_size));
 
     for(int i = 0; i < data_size; i++)
     {
@@ -181,7 +178,7 @@ int second_example()
     {
         size_t data_size = buf.st_size;
 
-        char *data_src = (char *)calloc(data_size, sizeof(char)); //here
+        char *data_src = (char *)calloc(data_size + 1, sizeof(char)); //here
         if(data_src == NULL)
         {
             ERROR_MESSAGE;
