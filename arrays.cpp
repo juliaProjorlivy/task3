@@ -8,7 +8,8 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-#define ERROR_MESSAGE (fprintf(stderr, "%s\n", strerror(errno)))
+#define ERROR_MESSAGE (fprintf(stderr, "☠️  Error: %d, %s\n", errno, strerror(errno)))
+#define EXAMPLE_END_MESSAGE(num) (printf("%s example completed\n--------😎--------\n\n", num))
 
 
 // выводит строки из массива
@@ -119,12 +120,16 @@ void clean_data(char **data, size_t data_size)
 
 int first_example()
 {
+    puts("--------😈--------");
+    puts("firs example");
+
     const char max_rows = 20;
 
     FILE *file = fopen("data.txt", "r");
     if(file == NULL)
     {
         ERROR_MESSAGE;
+        EXAMPLE_END_MESSAGE("first");
         return 1;
     }
 
@@ -132,6 +137,7 @@ int first_example()
     if(data == NULL)
     {
         ERROR_MESSAGE;
+        EXAMPLE_END_MESSAGE("first");
         return 1;
     }
 
@@ -142,26 +148,32 @@ int first_example()
     fclose(file);
     free(data);
     
-    puts("first example completed");
-    puts("--------😎--------");
+    EXAMPLE_END_MESSAGE("first");
     return 0;
 }
 
 int second_example()
 {
+    puts("--------😈--------");
+    puts("second example");
+
     const char max_rows = 20;
 
     FILE *file = fopen("data.txt", "r");
     if(file == NULL)
     {
         ERROR_MESSAGE;
+        EXAMPLE_END_MESSAGE("second");
         return 1;
     }
 
     char **data_dest = (char **)calloc(sizeof(char *), max_rows);
-    if(data_dest == NULL)
+
+    if(data_dest == NULL);
     {
+        puts("here");
         ERROR_MESSAGE;
+        EXAMPLE_END_MESSAGE("second");
         return 1;
     }
 
@@ -170,50 +182,56 @@ int second_example()
     {
         size_t data_size = buf.st_size;
 
-        char *data_src = (char *)calloc(data_size, sizeof(char));
+        char *data_src = (char *)calloc(data_size, sizeof(char)); //here
+        size_t str_count = split_string(data_dest, data_src, data_size);
 
         if(data_src != NULL && data_size == fread(data_src, sizeof(char), data_size, file))
         {
-            size_t str_count = split_string(data_dest, data_src, data_size);
             print_rectangle((const char **)data_dest, str_count, 1);
-            clean_data(data_dest, str_count);
-            free(data_src);
         }
         else
         {
             ERROR_MESSAGE;
+            EXAMPLE_END_MESSAGE("second");
             return 1;
         }
+        clean_data(data_dest, str_count);
+        free(data_src);
     }
     else
     {
         ERROR_MESSAGE;
+        EXAMPLE_END_MESSAGE("second");
         return 1;
     }
     free(data_dest);
 
-
-
     fclose(file);
-    puts("second example completed");
-    puts("--------😎--------");
+    EXAMPLE_END_MESSAGE("second");
     return 0;
 }
 
 void third_example()
 {
+    puts("--------😈--------");
+    puts("third example");
+
     const char *data2[] = {"hay", "please", "free", "super", "run"};
     print_rectangle(data2, 5, 0);
-    puts("third example completed");
-    puts("--------😎--------");
+
+    EXAMPLE_END_MESSAGE("third");
 }
 
 int forth_example()
 {
+    puts("--------😈--------");
+    puts("forth example");
+
     FILE *file = fopen("data.txt", "r");
     if(file == NULL)
     {
         ERROR_MESSAGE;
+        EXAMPLE_END_MESSAGE("forth");
         return 1;
     }
 
@@ -234,6 +252,7 @@ int forth_example()
             else
             {
                 ERROR_MESSAGE;
+                EXAMPLE_END_MESSAGE("forth");
                 return 1;
             }
 
@@ -243,24 +262,26 @@ int forth_example()
     else
     {
         ERROR_MESSAGE;
+        EXAMPLE_END_MESSAGE("forth");
         return 1;
     }
 
     fclose(file);
-    puts("forth example completed");
-    puts("--------😎--------");
+    EXAMPLE_END_MESSAGE("forth");
     return 0;
 }
 
 void fifth_example()
 {
+    puts("--------😈--------");
+    puts("fifth example");
+
     const char data3[] = {   1,
                             2, 3, 
                             4, 5, 6,
                             7, 8, 9, 10};
     print_triangle(data3, 4);
-    puts("fifth example completed");
-    puts("--------😎--------");
+    EXAMPLE_END_MESSAGE("fifth");
 }
 
 int main()
