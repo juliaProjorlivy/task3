@@ -10,7 +10,7 @@
 // выводит строки из массива
 void print_rectangle(const char **data, size_t rows, int is_file)
 {
-    assert(*data != NULL);
+    assert(data != NULL);
     assert(isfinite(rows));
     assert(isfinite(is_file));
 
@@ -36,6 +36,7 @@ void print_triangle(const char *data, int n)
 {
     assert(data != NULL);
     assert(isfinite(n));
+
     for(int rows = 1; rows < n + 1; rows++)
     {
         for(int cols = 0; cols < rows; cols++)
@@ -239,7 +240,7 @@ void forth_example()
     {
         puts("file cannot be opened");
     }
-    
+
     fclose(file);
     puts("forth example completed");
     puts("--------😎--------");
