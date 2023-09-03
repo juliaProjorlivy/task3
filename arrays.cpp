@@ -171,7 +171,6 @@ int second_example()
 
     if(data_dest == NULL)
     {
-        puts("here");
         ERROR_MESSAGE;
         EXAMPLE_END_MESSAGE("second");
         return 1;
