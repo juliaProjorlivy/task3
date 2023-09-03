@@ -116,22 +116,30 @@ void first_example()
     const char max_rows = 20;
 
     FILE *file = fopen("data.txt", "r");
-    char **data = (char **)calloc(sizeof(char *), max_rows);
-
-    if(data != NULL)
+    if(file != NULL)
     {
-        size_t data_size = get_data(data, file); // data_size - количиство строк
-        print_rectangle((const char **)data, data_size, 1);
+        char **data = (char **)calloc(sizeof(char *), max_rows);
 
-        clean_data(data, data_size);
-        fclose(file);
-        free(data);
+        if(data != NULL)
+        {
+            size_t data_size = get_data(data, file); // data_size - количиство строк
+            print_rectangle((const char **)data, data_size, 1);
+
+            clean_data(data, data_size);
+            fclose(file);
+            free(data);
+        }
+
+        else
+        {
+            puts("memory allocation failure");
+        }
     }
-
     else
     {
-        puts("memory allocation failure");
+        puts("file cannot be opened");
     }
+
     puts("first example completed");
     puts("--------😎--------");
 }
@@ -141,38 +149,45 @@ void second_example()
     const char max_rows = 20;
 
     FILE *file = fopen("data.txt", "r");
-    char **data_dest = (char **)calloc(sizeof(char *), max_rows);
-
-    if(data_dest != NULL)
+    if(file != NULL)
     {
-        struct stat buf;
-        if(!stat("data.txt", &buf))
+        char **data_dest = (char **)calloc(sizeof(char *), max_rows);
+
+        if(data_dest != NULL)
         {
-            size_t data_size = buf.st_size;
-
-            char *data_src = (char *)calloc(data_size, sizeof(char));
-
-            if(data_src != NULL && data_size == fread(data_src, sizeof(char), data_size, file))
+            struct stat buf;
+            if(!stat("data.txt", &buf))
             {
-                size_t str_count = split_string(data_dest, data_src, data_size);
-                print_rectangle((const char **)data_dest, str_count, 1);
-                clean_data(data_dest, str_count);
-                free(data_src);
+                size_t data_size = buf.st_size;
+
+                char *data_src = (char *)calloc(data_size, sizeof(char));
+
+                if(data_src != NULL && data_size == fread(data_src, sizeof(char), data_size, file))
+                {
+                    size_t str_count = split_string(data_dest, data_src, data_size);
+                    print_rectangle((const char **)data_dest, str_count, 1);
+                    clean_data(data_dest, str_count);
+                    free(data_src);
+                }
+                else
+                {
+                    puts("memory allocation failure");
+                }
             }
             else
             {
-                puts("memory allocation failure");
+                puts("unable to stat");
             }
+            free(data_dest);
         }
         else
         {
-            puts("unable to stat");
+            puts("memory allocation failure\n");
         }
-        free(data_dest);
     }
     else
     {
-        puts("memory allocation failure\n");
+        puts("file cannot be opened");
     }
 
     fclose(file);
@@ -191,31 +206,38 @@ void third_example()
 void forth_example()
 {
     FILE *file = fopen("data.txt", "r");
-    struct stat buf;
-    if(!stat("data.txt", &buf))
+    if(file != NULL)
     {
-        size_t data_size = buf.st_size;
-
-        char *data = (char *)calloc(data_size + 1, sizeof(char));
-
-        if(data != NULL)
+        struct stat buf;
+        if(!stat("data.txt", &buf))
         {
-            if(data_size == fread(data, sizeof(char), data_size, file))
-            {
-                data[data_size] = '\0';
-                puts(data);
-            }
-            else
-            {
-                puts("memory allocation failure");
-            }
+            size_t data_size = buf.st_size;
 
-            free(data);
+            char *data = (char *)calloc(data_size + 1, sizeof(char));
+
+            if(data != NULL)
+            {
+                if(data_size == fread(data, sizeof(char), data_size, file))
+                {
+                    data[data_size] = '\0';
+                    puts(data);
+                }
+                else
+                {
+                    puts("memory allocation failure");
+                }
+
+                free(data);
+            }
+        }
+        else
+        {
+            puts("unable to stat");
         }
     }
     else
     {
-        puts("unable to stat");
+        puts("file cannot be opened");
     }
     
     fclose(file);
