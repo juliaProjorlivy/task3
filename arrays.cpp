@@ -3,9 +3,13 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <math.h>
+#include <errno.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
+
+#define ERROR_MESSAGE (fprintf(stderr, "%s\n", strerror(errno)))
+
 
 // выводит строки из массива
 void print_rectangle(const char **data, size_t rows, int is_file)
@@ -63,7 +67,7 @@ size_t get_data(char **data, FILE *stream)
         {
             if((*(data + i) = strdup(line)) == NULL)
             {
-                puts("memory allocation error");
+                ERROR_MESSAGE;
                 break;
             }
             i++;
@@ -89,7 +93,8 @@ size_t split_string(char **dest, char *src, size_t size)
         {
             if((*(dest + str_count) = strndup(src + i - len, len)) == NULL)
             {
-                puts("memory allocation error");
+                ERROR_MESSAGE;
+                break;
             }
             str_count++;
             len = 0;
@@ -119,14 +124,14 @@ int first_example()
     FILE *file = fopen("data.txt", "r");
     if(file == NULL)
     {
-        puts("file cannot be opened");
+        ERROR_MESSAGE;
         return 1;
     }
 
     char **data = (char **)calloc(sizeof(char *), max_rows);
     if(data == NULL)
     {
-        puts("memory allocation failure");
+        ERROR_MESSAGE;
         return 1;
     }
 
@@ -149,14 +154,14 @@ int second_example()
     FILE *file = fopen("data.txt", "r");
     if(file == NULL)
     {
-        puts("file cannot be opened");
+        ERROR_MESSAGE;
         return 1;
     }
 
     char **data_dest = (char **)calloc(sizeof(char *), max_rows);
     if(data_dest == NULL)
     {
-        puts("memory allocation failure\n");
+        ERROR_MESSAGE;
         return 1;
     }
 
@@ -176,13 +181,13 @@ int second_example()
         }
         else
         {
-            puts("memory allocation failure");
+            ERROR_MESSAGE;
             return 1;
         }
     }
     else
     {
-        puts("unable to stat");
+        ERROR_MESSAGE;
         return 1;
     }
     free(data_dest);
@@ -208,7 +213,7 @@ int forth_example()
     FILE *file = fopen("data.txt", "r");
     if(file == NULL)
     {
-        puts("file cannot be opened");
+        ERROR_MESSAGE;
         return 1;
     }
 
@@ -228,7 +233,7 @@ int forth_example()
             }
             else
             {
-                puts("memory allocation failure");
+                ERROR_MESSAGE;
                 return 1;
             }
 
@@ -237,7 +242,7 @@ int forth_example()
     }
     else
     {
-        puts("unable to stat");
+        ERROR_MESSAGE;
         return 1;
     }
 
