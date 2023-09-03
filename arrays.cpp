@@ -169,7 +169,7 @@ int second_example()
 
     char **data_dest = (char **)calloc(sizeof(char *), max_rows);
 
-    if(data_dest == NULL);
+    if(data_dest == NULL)
     {
         puts("here");
         ERROR_MESSAGE;
@@ -183,11 +183,19 @@ int second_example()
         size_t data_size = buf.st_size;
 
         char *data_src = (char *)calloc(data_size, sizeof(char)); //here
-        size_t str_count = split_string(data_dest, data_src, data_size);
-
-        if(data_src != NULL && data_size == fread(data_src, sizeof(char), data_size, file))
+        if(data_src == NULL)
         {
+            ERROR_MESSAGE;
+            EXAMPLE_END_MESSAGE("second");
+            return 1;
+        }
+        if(data_size == fread(data_src, sizeof(char), data_size, file))
+        {
+            size_t str_count = split_string(data_dest, data_src, data_size);
             print_rectangle((const char **)data_dest, str_count, 1);
+            clean_data(data_dest, str_count);
+            free(data_src);
+            
         }
         else
         {
@@ -195,8 +203,7 @@ int second_example()
             EXAMPLE_END_MESSAGE("second");
             return 1;
         }
-        clean_data(data_dest, str_count);
-        free(data_src);
+        
     }
     else
     {
@@ -205,7 +212,6 @@ int second_example()
         return 1;
     }
     free(data_dest);
-
     fclose(file);
     EXAMPLE_END_MESSAGE("second");
     return 0;
