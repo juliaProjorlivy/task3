@@ -7,8 +7,6 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-#define MAX_ROWS 20
-
 // выводит строки из массива
 void print_rectangle(const char **data, size_t rows, int is_file)
 {
@@ -64,7 +62,7 @@ size_t get_data(char **data, FILE *stream)
         {
             if((*(data + i) = strdup(line)) == NULL)
             {
-                printf("memory allocation error");
+                puts("memory allocation error");
                 break;
             }
             i++;
@@ -90,7 +88,7 @@ size_t split_string(char **dest, char *src, size_t size)
         {
             if((*(dest + str_count) = strndup(src + i - len, len)) == NULL)
             {
-                printf("memory allocation error");
+                puts("memory allocation error");
             }
             str_count++;
             len = 0;
@@ -115,8 +113,10 @@ void clean_data(char **data, size_t data_size)
 
 void first_example()
 {
+    const char max_rows = 20;
+
     FILE *file = fopen("data.txt", "r");
-    char **data = (char **)calloc(sizeof(char *), MAX_ROWS);
+    char **data = (char **)calloc(sizeof(char *), max_rows);
 
     if(data != NULL)
     {
@@ -138,30 +138,36 @@ void first_example()
 
 void second_example()
 {
+    const char max_rows = 20;
+
     FILE *file = fopen("data.txt", "r");
-    char **data_dest = (char **)calloc(sizeof(char *), MAX_ROWS);
+    char **data_dest = (char **)calloc(sizeof(char *), max_rows);
 
     if(data_dest != NULL)
     {
         struct stat buf;
-        stat("data.txt", &buf);
-
-        size_t data_size = buf.st_size;
-
-        char *data_src = (char *)calloc(data_size, sizeof(char));
-
-        if(data_src != NULL && data_size == fread(data_src, sizeof(char), data_size, file))
+        if(!stat("data.txt", &buf))
         {
-            size_t str_count = split_string(data_dest, data_src, data_size);
-            print_rectangle((const char **)data_dest, str_count, 1);
-            clean_data(data_dest, str_count);
-            free(data_src);
+            size_t data_size = buf.st_size;
+
+            char *data_src = (char *)calloc(data_size, sizeof(char));
+
+            if(data_src != NULL && data_size == fread(data_src, sizeof(char), data_size, file))
+            {
+                size_t str_count = split_string(data_dest, data_src, data_size);
+                print_rectangle((const char **)data_dest, str_count, 1);
+                clean_data(data_dest, str_count);
+                free(data_src);
+            }
+            else
+            {
+                puts("memory allocation failure");
+            }
         }
         else
         {
-            puts("memory allocation failure");
+            puts("unable to stat");
         }
-
         free(data_dest);
     }
     else
@@ -186,25 +192,30 @@ void forth_example()
 {
     FILE *file = fopen("data.txt", "r");
     struct stat buf;
-    stat("data.txt", &buf);
-
-    size_t data_size = buf.st_size;
-
-    char *data = (char *)calloc(data_size + 1, sizeof(char));
-
-    if(data != NULL)
+    if(!stat("data.txt", &buf))
     {
-        if(data_size == fread(data, sizeof(char), data_size, file))
-        {
-            data[data_size] = '\0';
-            puts(data);
-        }
-        else
-        {
-            puts("memory allocation failure");
-        }
+        size_t data_size = buf.st_size;
 
-        free(data);
+        char *data = (char *)calloc(data_size + 1, sizeof(char));
+
+        if(data != NULL)
+        {
+            if(data_size == fread(data, sizeof(char), data_size, file))
+            {
+                data[data_size] = '\0';
+                puts(data);
+            }
+            else
+            {
+                puts("memory allocation failure");
+            }
+
+            free(data);
+        }
+    }
+    else
+    {
+        puts("unable to stat");
     }
     
     fclose(file);
