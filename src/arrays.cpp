@@ -350,7 +350,7 @@ int seventh_example()
         EXAMPLE_END_MESSAGE("seventh");
         return 1;
     }
-    size_t data_size = (size_t)getline(line, &max_strlen, file);
+    size_t data_size = (size_t)my_getline(line, &max_strlen, file);
 
     size_t i = 0;
     while(data_size != -1)
@@ -361,13 +361,13 @@ int seventh_example()
             EXAMPLE_END_MESSAGE("seventh");
             return 1;   
         }
-        data_size = (size_t)getline(line, &max_strlen, file);
+        data_size = (size_t)my_getline(line, &max_strlen, file);
         i++;
     }
 
     print_rectangle((const char **)data, i, 1);
     fclose(file);
-    clean_data(data, i);
+    clean_data(data, max_rows);
     free(line);
     free(data);
     EXAMPLE_END_MESSAGE("seventh");

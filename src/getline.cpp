@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-ssize_t getline(char **line, size_t *n, FILE *stream)
+ssize_t my_getline(char **line, size_t *n, FILE *stream)
 {
     assert(line != NULL);
     assert(n != NULL);
@@ -14,7 +14,7 @@ ssize_t getline(char **line, size_t *n, FILE *stream)
     }
 
     ssize_t i = 0;
-    char c = fgetc(stream);
+    char c = (char)fgetc(stream);
     const int multiplayer = 2;
     while(c != EOF)
     {
@@ -25,12 +25,12 @@ ssize_t getline(char **line, size_t *n, FILE *stream)
         }
         i++;
 
-        if(i > *n)
+        if((size_t)i > *n)
         {
             *n *= multiplayer;
             *line = (char *)realloc(*line, *n);
         }
-        c = fgetc(stream);
+        c = (char)fgetc(stream);
     }
     if(c == EOF)
     {
