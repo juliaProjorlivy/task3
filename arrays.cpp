@@ -134,7 +134,7 @@ void clean_data(char **data, size_t data_size)
 
 int first_example()
 {
-    puts("--------😈--------");
+    puts("--------🐈--------");
     puts("firs example");
 
     const char max_rows = 20;
@@ -168,7 +168,7 @@ int first_example()
 
 int second_example()
 {
-    puts("--------😈--------");
+    puts("--------🐈--------");
     puts("second example");
 
     const char max_rows = 20;
@@ -234,7 +234,7 @@ int second_example()
 
 void third_example()
 {
-    puts("--------😈--------");
+    puts("--------🐈--------");
     puts("third example");
 
     const char *data2[] = {"hay", "please", "free", "super", "run"};
@@ -245,7 +245,7 @@ void third_example()
 
 int forth_example()
 {
-    puts("--------😈--------");
+    puts("--------🐈--------");
     puts("forth example");
 
     FILE *file = fopen("data.txt", "r");
@@ -294,7 +294,7 @@ int forth_example()
 
 void fifth_example()
 {
-    puts("--------😈--------");
+    puts("--------🐈--------");
     puts("fifth example");
 
     const char data3[] = {   1,
@@ -307,7 +307,7 @@ void fifth_example()
 
 void sixth_example()
 {
-    puts("--------😈--------");
+    puts("--------🐈--------");
     puts("sixth example");
 
     const char data[] = {3, 4,
@@ -322,7 +322,7 @@ void sixth_example()
 // getline
 int seventh_example()
 {
-    puts("--------😈--------");
+    puts("--------🐈--------");
     puts("seventh example");
 
     size_t max_rows = 20;
@@ -355,7 +355,7 @@ int seventh_example()
     size_t i = 0;
     while(data_size != -1)
     {
-        if((*(data + i) = strndup(*line, data_size)) == NULL)
+        if((*(data + i) = strndup(*line, data_size + 1)) == NULL)
         {
             ERROR_MESSAGE("memory allocation failure");
             EXAMPLE_END_MESSAGE("seventh");
