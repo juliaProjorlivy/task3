@@ -1,3 +1,4 @@
+#include "getline.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -11,6 +12,22 @@
 #define ERROR_MESSAGE(err) (fprintf(stderr, "☠️  Error %s: %d, %s\n", (err), errno, strerror(errno)))
 #define EXAMPLE_END_MESSAGE(num) (printf("%s example completed\n--------😎--------\n\n", (num)))
 
+
+void print_mas_ded_1(const char *data)
+{
+    assert(data != NULL);
+
+    size_t rows = data[0];
+    size_t cols =  data[1];
+    for(size_t row = 0; row < rows; row++)
+    {
+        for(size_t col = 0; col < cols; col++)
+        {
+            printf("%d ", *(data + row * cols + col + 2));
+        }
+        printf("\n");
+    }
+}
 
 // выводит строки из массива
 void print_rectangle(const char **data, size_t rows, int is_file)
@@ -188,7 +205,9 @@ int second_example()
         if(data_size == fread(data_src, sizeof(char), data_size, file))
         {
             size_t str_count = split_string(data_dest, data_src, data_size);
+
             print_rectangle((const char **)data_dest, str_count, 1);
+
             clean_data(data_dest, str_count);
             free(data_src);
             
@@ -286,6 +305,76 @@ void fifth_example()
     EXAMPLE_END_MESSAGE("fifth");
 }
 
+void sixth_example()
+{
+    puts("--------😈--------");
+    puts("sixth example");
+
+    const char data[] = {3, 4,
+                        1, 2, 3, 4,
+                        5, 6, 7, 8,
+                        9, 10, 11, 12};
+
+    print_mas_ded_1(data);
+    EXAMPLE_END_MESSAGE("sixth");
+}
+
+// getline
+int seventh_example()
+{
+    puts("--------😈--------");
+    puts("seventh example");
+
+    size_t max_rows = 20;
+    size_t max_strlen = 20;
+
+    FILE *file = fopen("data.txt", "r");
+    if(file == NULL)
+    {
+        ERROR_MESSAGE("open file");
+        EXAMPLE_END_MESSAGE("seventh");
+        return 1;
+    }
+    
+    char **data = (char **)calloc(sizeof(char *), max_rows);
+    if(data == NULL)
+    {
+        ERROR_MESSAGE("memory allocation failure");
+        EXAMPLE_END_MESSAGE("seventh");
+        return 1;
+    }
+    char **line = (char **)calloc(sizeof(char *), max_strlen);
+    if(line == NULL)
+    {
+        ERROR_MESSAGE("memory allocation failure");
+        EXAMPLE_END_MESSAGE("seventh");
+        return 1;
+    }
+    size_t data_size = (size_t)getline(line, &max_strlen, file);
+
+    size_t i = 0;
+    while(data_size != -1)
+    {
+        if((*(data + i) = strndup(*line, data_size)) == NULL)
+        {
+            ERROR_MESSAGE("memory allocation failure");
+            EXAMPLE_END_MESSAGE("seventh");
+            return 1;   
+        }
+        data_size = (size_t)getline(line, &max_strlen, file);
+        i++;
+    }
+
+    print_rectangle((const char **)data, i, 1);
+    fclose(file);
+    clean_data(data, i);
+    free(line);
+    free(data);
+    EXAMPLE_END_MESSAGE("seventh");
+    return 0;
+
+}
+
 int main()
 {
     // firste example print data from file using get_data function
@@ -302,5 +391,8 @@ int main()
     
     // fifth print triangle array data
     fifth_example();
-    
+
+    sixth_example();
+
+    seventh_example();
 }
