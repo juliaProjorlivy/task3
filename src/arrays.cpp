@@ -77,13 +77,20 @@ size_t get_data(char **data, FILE *stream)
 
     const int max_strlen = 20;
     size_t i = 0;
+    int fl = 0;
     char line[max_strlen] = {};
     while(!feof(stream))
     {
+        if(fl)
+        {
+            i--;
+            break;
+        }
         if(fgets(line, max_strlen, stream) != NULL)
         {
             if((*(data + i) = strdup(line)) == NULL)
             {
+                fl = 1;
                 ERROR_MESSAGE("cannot read file");
                 break;
             }
@@ -355,8 +362,13 @@ int seventh_example()
     size_t i = 0;
     while(data_size != -1)
     {
+        // printf("size = %zu herer - %s",data_size, *line);
         if((*(data + i) = strndup(*line, data_size + 1)) == NULL)
         {
+            free(data);
+            free(*line);
+            free(line);
+            clean_data(data, i);
             ERROR_MESSAGE("memory allocation failure");
             EXAMPLE_END_MESSAGE("seventh");
             return 1;   
@@ -367,7 +379,8 @@ int seventh_example()
 
     print_rectangle((const char **)data, i, 1);
     fclose(file);
-    clean_data(data, max_rows);
+    clean_data(data, i);
+    free(*line);
     free(line);
     free(data);
     EXAMPLE_END_MESSAGE("seventh");
