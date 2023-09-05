@@ -139,7 +139,7 @@ void clean_data(char **data, size_t data_size)
 int first_example()
 {
     puts("--------🐈--------");
-    puts("firs example");
+    puts("first example");
 
     const char max_rows = 20;
 

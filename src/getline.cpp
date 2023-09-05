@@ -15,7 +15,7 @@ ssize_t my_getline(char **line, size_t *n, FILE *stream)
 
     ssize_t i = 0;
     char c = (char)fgetc(stream);
-    const int multiplayer = 2;
+    const int multiplier = 2;
     while(c != EOF)
     {
         (*line)[i] = c;
@@ -27,7 +27,7 @@ ssize_t my_getline(char **line, size_t *n, FILE *stream)
 
         if((size_t)i > *n)
         {
-            *n *= multiplayer;
+            *n *= multiplier;
             *line = (char *)realloc(*line, *n);
         }
         c = (char)fgetc(stream);
