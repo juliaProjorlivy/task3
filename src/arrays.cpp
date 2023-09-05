@@ -41,7 +41,7 @@ void print_rectangle(const char **data, size_t rows, int is_file)
         {
             printf("%s", *(data + row));
         }
-        printf("\n");
+        // printf("\n");
     }
     else
     {
@@ -77,26 +77,20 @@ size_t get_data(char **data, FILE *stream)
 
     const int max_strlen = 20;
     size_t i = 0;
-    int fl = 0;
     char line[max_strlen] = {};
-    while(!feof(stream))
+    while(!feof(stream)) 
     {
-        if(fl)
-        {
-            i--;
-            break;
-        }
         if(fgets(line, max_strlen, stream) != NULL)
         {
-            if((*(data + i) = strdup(line)) == NULL)
+            if((*(data + i) = strndup(line, strlen(line))) == NULL)
             {
-                fl = 1;
                 ERROR_MESSAGE("cannot read file");
                 break;
             }
             i++;
         }
     }
+    
     return i;
 }
 
@@ -122,7 +116,10 @@ size_t split_string(char **dest, char *src, size_t size)
             str_count++;
             len = 0;
         }
-        len++; //длина строки без учета \n
+        else
+        {
+            len++; //длина строки без учета \n
+        }
         i++;
 
     }
@@ -213,7 +210,7 @@ int second_example()
         {
             size_t str_count = split_string(data_dest, data_src, data_size);
 
-            print_rectangle((const char **)data_dest, str_count, 1);
+            print_rectangle((const char **)data_dest, str_count, 0);
 
             clean_data(data_dest, str_count);
             free(data_src);
@@ -274,7 +271,7 @@ int forth_example()
         {
             if(data_size == fread(data, sizeof(char), data_size, file))
             {
-                data[data_size] = '\0';
+                data[data_size-1] = '\0';
                 puts(data);
             }
             else
