@@ -16,12 +16,12 @@ ssize_t my_getline(char **line, size_t *n, FILE *stream)
     ssize_t i = 0;
     char c = (char)fgetc(stream);
     const int multiplier = 2;
-    while(c != EOF)
+    while(c != '\n')
     {
         (*line)[i] = c;
-        if(c == '\n')
+        if(c == EOF)
         {
-            break;
+            return -1;
         }
         i++;
 
@@ -31,10 +31,6 @@ ssize_t my_getline(char **line, size_t *n, FILE *stream)
             *line = (char *)realloc(*line, *n);
         }
         c = (char)fgetc(stream);
-    }
-    if(c == EOF)
-    {
-        return -1;
     }
 
     return i;
