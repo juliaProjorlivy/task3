@@ -33,7 +33,6 @@ void print_mas_ded_1(const char *data)
 void print_rectangle(const char **data, size_t rows, int is_file)
 {
     assert(data != NULL);
-    assert(isfinite(is_file));
 
     if(is_file)
     {
@@ -56,7 +55,6 @@ void print_rectangle(const char **data, size_t rows, int is_file)
 void print_triangle(const char *data, int n)
 {
     assert(data != NULL);
-    assert(isfinite(n));
 
     for(int rows = 1; rows < n + 1; rows++)
     {
