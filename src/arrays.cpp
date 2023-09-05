@@ -30,24 +30,13 @@ void print_mas_ded_1(const char *data)
 }
 
 // выводит строки из массива
-void print_rectangle(const char **data, size_t rows, int is_file)
+void print_rectangle(const char **data, size_t rows)
 {
     assert(data != NULL);
 
-    if(is_file)
-    {
-        for(size_t row = 0; row < rows; row++)
-        {
-            printf("%s", *(data + row));
-        }
-        // printf("\n");
-    }
-    else
-    {
-        for(size_t row = 0; row < rows; row++)
-        {   
-            printf("%s\n", *(data + row));
-        }
+    for(size_t row = 0; row < rows; row++)
+    {   
+        printf("%s\n", *(data + row));
     }
 }
 
@@ -80,7 +69,7 @@ size_t get_data(char **data, FILE *stream)
     {
         if(fgets(line, max_strlen, stream) != NULL)
         {
-            if((*(data + i) = strndup(line, strlen(line))) == NULL)
+            if((*(data + i) = strndup(line, strlen(line) - 1)) == NULL)
             {
                 ERROR_MESSAGE("cannot read file");
                 break;
@@ -158,7 +147,7 @@ int first_example()
     }
 
     size_t data_size = get_data(data, file); // data_size - количиство строк
-    print_rectangle((const char **)data, data_size, 1);
+    print_rectangle((const char **)data, data_size);
 
     clean_data(data, data_size);
     fclose(file);
@@ -208,7 +197,7 @@ int second_example()
         {
             size_t str_count = split_string(data_dest, data_src, data_size);
 
-            print_rectangle((const char **)data_dest, str_count, 0);
+            print_rectangle((const char **)data_dest, str_count);
 
             clean_data(data_dest, str_count);
             free(data_src);
@@ -240,7 +229,7 @@ void third_example()
     puts("third example");
 
     const char *data2[] = {"hay", "please", "free", "super", "run"};
-    print_rectangle(data2, 5, 0);
+    print_rectangle(data2, 5);
 
     EXAMPLE_END_MESSAGE("third");
 }
@@ -357,7 +346,7 @@ int seventh_example()
     size_t i = 0;
     while(data_size != -1)
     {
-        // printf("size = %zu herer - %s",data_size, *line);
+        (*line)[data_size] = '\0';
         if((*(data + i) = strndup(*line, data_size + 1)) == NULL)
         {
             free(data);
@@ -372,7 +361,7 @@ int seventh_example()
         i++;
     }
 
-    print_rectangle((const char **)data, i, 1);
+    print_rectangle((const char **)data, i);
     fclose(file);
     clean_data(data, i);
     free(*line);
