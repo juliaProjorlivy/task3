@@ -143,6 +143,7 @@ int first_example()
     {
         ERROR_MESSAGE("memory allocation failure");
         EXAMPLE_END_MESSAGE("first");
+        fclose(file);
         return 1;
     }
 
@@ -178,6 +179,7 @@ int second_example()
     {
         ERROR_MESSAGE("memory allocation failure");
         EXAMPLE_END_MESSAGE("second");
+        fclose(file);
         return 1;
     }
 
@@ -191,6 +193,7 @@ int second_example()
         {
             ERROR_MESSAGE("memory allocation failure");
             EXAMPLE_END_MESSAGE("second");
+            fclose(file);
             return 1;
         }
         if(data_size == fread(data_src, sizeof(char), data_size, file))
@@ -207,6 +210,9 @@ int second_example()
         {
             ERROR_MESSAGE("cannot read file");
             EXAMPLE_END_MESSAGE("second");
+            free(data_src);
+            free(data_dest);
+            fclose(file);
             return 1;
         }
         
@@ -215,6 +221,8 @@ int second_example()
     {
         ERROR_MESSAGE("unable to stat");
         EXAMPLE_END_MESSAGE("second");
+        fclose(file);
+        free(data_dest);
         return 1;
     }
     free(data_dest);
@@ -244,6 +252,7 @@ int forth_example()
     {
         ERROR_MESSAGE("open file");
         EXAMPLE_END_MESSAGE("forth");
+        fclose(file);
         return 1;
     }
 
@@ -269,12 +278,14 @@ int forth_example()
             }
 
             free(data);
+            fclose(file);
         }
     }
     else
     {
         ERROR_MESSAGE("unable to stat");
         EXAMPLE_END_MESSAGE("forth");
+        fclose(file);
         return 1;
     }
 
@@ -332,6 +343,7 @@ int seventh_example()
     {
         ERROR_MESSAGE("memory allocation failure");
         EXAMPLE_END_MESSAGE("seventh");
+        fclose(file);
         return 1;
     }
     char **line = (char **)calloc(sizeof(char *), max_strlen);
@@ -339,6 +351,8 @@ int seventh_example()
     {
         ERROR_MESSAGE("memory allocation failure");
         EXAMPLE_END_MESSAGE("seventh");
+        free(data);
+        fclose(file);
         return 1;
     }
     size_t data_size = (size_t)my_getline(line, &max_strlen, file);
@@ -352,6 +366,7 @@ int seventh_example()
             free(data);
             free(*line);
             free(line);
+            fclose(file);
             clean_data(data, i);
             ERROR_MESSAGE("memory allocation failure");
             EXAMPLE_END_MESSAGE("seventh");
@@ -388,8 +403,9 @@ int main()
     
     // fifth print triangle array data
     fifth_example();
-
+    // simple example print the data from an array
     sixth_example();
 
+    // reads the data using getline
     seventh_example();
 }
