@@ -143,6 +143,7 @@ int first_example()
     {
         ERROR_MESSAGE("memory allocation failure");
         EXAMPLE_END_MESSAGE("first");
+        fclose(file);
         return 1;
     }
 
@@ -178,6 +179,7 @@ int second_example()
     {
         ERROR_MESSAGE("memory allocation failure");
         EXAMPLE_END_MESSAGE("second");
+        fclose(file);
         return 1;
     }
 
@@ -191,6 +193,7 @@ int second_example()
         {
             ERROR_MESSAGE("memory allocation failure");
             EXAMPLE_END_MESSAGE("second");
+            fclose(file);
             return 1;
         }
         if(data_size == fread(data_src, sizeof(char), data_size, file))
@@ -207,6 +210,7 @@ int second_example()
         {
             ERROR_MESSAGE("cannot read file");
             EXAMPLE_END_MESSAGE("second");
+            fclose(file);
             return 1;
         }
         
@@ -215,8 +219,10 @@ int second_example()
     {
         ERROR_MESSAGE("unable to stat");
         EXAMPLE_END_MESSAGE("second");
+        fclose(file);
         return 1;
     }
+
     free(data_dest);
     fclose(file);
     EXAMPLE_END_MESSAGE("second");
@@ -265,6 +271,7 @@ int forth_example()
             {
                 ERROR_MESSAGE("cannot read file");
                 EXAMPLE_END_MESSAGE("forth");
+                fclose(file);
                 return 1;
             }
 
@@ -275,6 +282,7 @@ int forth_example()
     {
         ERROR_MESSAGE("unable to stat");
         EXAMPLE_END_MESSAGE("forth");
+        fclose(file);
         return 1;
     }
 
@@ -332,6 +340,7 @@ int seventh_example()
     {
         ERROR_MESSAGE("memory allocation failure");
         EXAMPLE_END_MESSAGE("seventh");
+        fclose(file);
         return 1;
     }
     char **line = (char **)calloc(sizeof(char *), max_strlen);
@@ -339,6 +348,7 @@ int seventh_example()
     {
         ERROR_MESSAGE("memory allocation failure");
         EXAMPLE_END_MESSAGE("seventh");
+        fclose(file);
         return 1;
     }
     size_t data_size = (size_t)my_getline(line, &max_strlen, file);
@@ -372,6 +382,102 @@ int seventh_example()
 
 }
 
+
+size_t split_line(char *data, size_t data_size, char **ptr_data)
+{
+    assert(data != NULL);
+    assert(ptr_data != NULL);
+
+    size_t str_count = 0;
+    size_t i = 0;
+    *ptr_data = data;
+
+    for(; i < data_size; i++)
+    {
+        if(data[i] == '\n')
+        {
+            data[i] = '\0';
+            str_count++;
+            ptr_data[str_count] = data + i + 1;
+        }
+    }
+    return str_count;
+}
+
+int eight_example()
+{
+    puts("--------🐈--------");
+    puts("eight example");
+
+    const int max_str_count = 20;
+
+    FILE *file = fopen("data.txt", "r");
+    if(file == NULL)
+    {
+        ERROR_MESSAGE("open file");
+        EXAMPLE_END_MESSAGE("seventh");
+        return 1;
+    }
+
+    struct stat buf;
+    if(!stat("data.txt", &buf))
+    {
+        size_t data_size = buf.st_size;
+
+        char *data = (char *)calloc(data_size + 1, sizeof(char*));
+        if(data == NULL)
+        {
+            ERROR_MESSAGE("cannot read file");
+            EXAMPLE_END_MESSAGE("eight");
+            fclose(file);
+            return 1;
+        }
+
+        char **ptr_data = (char **)calloc(sizeof(char*), max_str_count);
+
+            if(ptr_data == NULL)
+            {
+                ERROR_MESSAGE("memory allocation failure");
+                EXAMPLE_END_MESSAGE("eight");
+                fclose(file);
+                return 1;
+            }
+
+        if(data_size == fread(data, sizeof(char), data_size, file))
+        {
+
+            size_t str_count = split_line(data, data_size, ptr_data);
+
+            print_rectangle((const char **)ptr_data, str_count);
+
+        }
+        else
+        {
+            ERROR_MESSAGE("cannot read file");
+            EXAMPLE_END_MESSAGE("eight");
+            fclose(file);
+            return 1;
+        }
+
+        free(*ptr_data);
+        free(ptr_data);
+
+    }
+    else
+    {
+        ERROR_MESSAGE("unable to stat");
+        EXAMPLE_END_MESSAGE("eight");
+        fclose(file);
+        return 1;
+    }
+
+    
+    fclose(file);
+    EXAMPLE_END_MESSAGE("eight");
+    return 0;
+}
+
+
 int main()
 {
     // firste example print data from file using get_data function
@@ -393,4 +499,6 @@ int main()
 
     // reads the data using getline
     seventh_example();
+
+    eight_example();
 }
